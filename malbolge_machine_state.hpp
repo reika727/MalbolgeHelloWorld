@@ -164,6 +164,6 @@ public:
      * @return 現在の状態へと遷移できる Malbolge コード
      * @note 使用されない命令は全て o（Nop 命令）で埋める
      */
-    std::string get_code();
+    std::string get_code() const;
 };
 #endif

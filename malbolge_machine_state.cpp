@@ -76,7 +76,7 @@ malbolge_machine_state::ExecutionStatus malbolge_machine_state::increment()
 /**
  * @copydoc malbolge_machine_state::get_code()
  */
-std::string malbolge_machine_state::get_code()
+std::string malbolge_machine_state::get_code() const
 {
     std::map<malbolge::word, malbolge::word> original_memory;
     for (auto sp = shared_from_this(); sp->parent; sp = sp->parent) {
