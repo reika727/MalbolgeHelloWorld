@@ -92,7 +92,7 @@ private:
      * @param address アクセスするアドレス
      * @return address 番地のメモリが初期化されている場合はその値。
      * @return 初期化されていない場合は例外を投げる。
-     * @throws std::runtime_error address 番地のメモリが初期化されていない
+     * @throws memory_uninitialized_exception address 番地のメモリが初期化されていない
      */
     malbolge::word access_memory(const malbolge::word address) const;
 
