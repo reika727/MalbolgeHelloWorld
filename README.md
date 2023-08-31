@@ -1,5 +1,8 @@
 Malbolge で HelloWorld するプログラムを探索します。詳しい解説は[ここ](https://qiita.com/reika727/items/1e5f4fb54916c6fed483)を見てってください。
 
+# REQUIREMENT
+C++23 から標準ライブラリに導入された関数 (`std::to_underlying`) を使っているので、わりと新しめの g++ か clang++ がいります。
+
 # HOW TO USE
 `make test` を叩くだけです。
 
