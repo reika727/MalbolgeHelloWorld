@@ -21,7 +21,7 @@ namespace {
      * 現在の状態から HELLO WORLD という文字列を出力できるか確かめる。
      * ただし探索時間を縮めるため、大文字・小文字の違いは無視する。
      */
-    const beam_searcher_t::generation_function_t generate_child = [](auto parent, auto bi) {
+    const beam_searcher_t::generation_function_t check_or_generate = [](auto parent, auto bi) {
         // 目標文字列（大文字・小文字の違いは無視する）
         const std::string target = "Hello World";
         try {
@@ -67,7 +67,7 @@ namespace {
 int main()
 {
     constexpr unsigned beam_width = 10000;
-    beam_searcher_t bs(beam_width, generate_child, scoring_function, std::make_shared<malbolge_machine_state>());
+    beam_searcher_t bs(beam_width, check_or_generate, scoring_function, std::make_shared<malbolge_machine_state>());
     while (!bs.get_current_generation().empty()) {
         std::cout << "GENERATION #" << bs.get_generation() << std::endl;
         std::cout << "\tGENERATION SIZE: " << bs.get_current_generation().size() << std::endl;

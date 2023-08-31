@@ -41,7 +41,7 @@ private:
     const unsigned beam_width;
 
     //! 子孫ノード生成関数
-    const generation_function_t generate_child;
+    const generation_function_t check_or_generate;
 
     //! スコア関数
     const scoring_function_t scoring_function;
@@ -55,19 +55,19 @@ private:
 public:
     /**
      * @param beam_width ビーム幅
-     * @param generate_child 子孫ノード生成関数
+     * @param check_or_generate 子孫ノード生成関数
      * @param scoring_function スコア関数
      * @param starting_point 根ノード
      * @throws std::runtime_error ビーム幅がゼロ
      */
     beam_searcher(
         const unsigned beam_width,
-        const generation_function_t generate_child,
+        const generation_function_t check_or_generate,
         const scoring_function_t scoring_function,
         const Node starting_point
     )
         : beam_width(beam_width),
-          generate_child(generate_child),
+          check_or_generate(check_or_generate),
           scoring_function(scoring_function),
           current_generation({starting_point})
     {
@@ -106,7 +106,7 @@ public:
         bool is_found = false;
         std::vector<Node> next_generation;
         for (const auto &parent : current_generation) {
-            if (generate_child(parent, std::back_inserter(next_generation))) {
+            if (check_or_generate(parent, std::back_inserter(next_generation))) {
                 *oi++ = parent;
                 is_found = true;
             }
