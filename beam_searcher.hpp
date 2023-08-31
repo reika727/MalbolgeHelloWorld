@@ -7,7 +7,6 @@
 #define BEAM_SEACHER_HPP
 #include <vector>
 #include <span>
-#include <optional>
 #include <functional>
 #include <algorithm>
 #include <random>
@@ -95,16 +94,21 @@ public:
 
     /**
      * @brief 現在の世代に条件を満たすものが存在するか検査しつつ、次の世代を生成する
-     * @return 現在の世代に条件を満たすものが存在するならばそれを返却する。
-     * @return そうでない場合は current_generation を次の世代で置き換え、std::nullopt を返却する。
+     * @tparam OutputIterator 出力イテレータの型
+     * @param oi 条件を満たしたノードの出力先
+     * @return この関数を呼び出した時点での世代に条件を満たすものが存在したか否か。
+     * @return 言い換えれば、oi に一つでもノードが出力されたか否か。
      * @note 子ノードが偏るのを防ぐため、ビーム幅に入れるノードのうち同率最下位のものは乱択する。
      */
-    std::optional<Node> search_current_generation()
+    template<class OutputIterator>
+    bool search_current_generation(OutputIterator oi)
     {
+        bool is_found = false;
         std::vector<Node> next_generation;
         for (const auto &parent : current_generation) {
             if (generate_child(parent, std::back_inserter(next_generation))) {
-                return parent;
+                *oi++ = parent;
+                is_found = true;
             }
         }
         std::ranges::sort(next_generation, std::ranges::greater(), scoring_function);
@@ -121,7 +125,7 @@ public:
         }
         ++generation;
         current_generation = std::move(next_generation);
-        return std::nullopt;
+        return is_found;
     }
 };
 #endif

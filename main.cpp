@@ -6,9 +6,11 @@
 #include "beam_searcher.hpp"
 #include "malbolge.hpp"
 #include "malbolge_machine_state.hpp"
+#include <iterator>
 #include <string>
 #include <memory>
 #include <algorithm>
+#include <random>
 #include <iostream>
 #include <cctype>
 
@@ -71,11 +73,15 @@ int main()
         std::cout << "\tGENERATION SIZE: " << bs.get_current_generation().size() << std::endl;
         std::cout << "\tBEST RESULT    : " << bs.get_current_generation().front()->get_output() << std::endl;
         std::cout << "\tBEST SCORE     : " << scoring_function(bs.get_current_generation().front()) << std::endl;
-        if (const auto final_result = bs.search_current_generation()) {
+        std::vector<std::shared_ptr<malbolge_machine_state>> found_solutions;
+        if (bs.search_current_generation(std::back_inserter(found_solutions))) {
+            std::mt19937 engine(std::random_device{}());
+            std::uniform_int_distribution random_index_distribution(0uz, found_solutions.size() - 1);
+            const auto random_solution = found_solutions[random_index_distribution(engine)];
             std::cout << std::endl;
-            std::cout << "\tFINAL RESULT   : " << (*final_result)->get_output() << std::endl;
-            std::cout << "\tFINAL SCORE    : " << scoring_function(*final_result) << std::endl;
-            std::cout << "\tCODE           : " << (*final_result)->get_code() << std::endl;
+            std::cout << "\tFINAL RESULT   : " << random_solution->get_output() << std::endl;
+            std::cout << "\tFINAL SCORE    : " << scoring_function(random_solution) << std::endl;
+            std::cout << "\tCODE           : " << random_solution->get_code() << std::endl;
             return EXIT_SUCCESS;
         }
     }
