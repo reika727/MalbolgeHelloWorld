@@ -30,13 +30,9 @@ namespace {
                     // 異常終了したノードは捨てる
                     break;
                 } else if (result == malbolge_machine_state::ExecutionStatus::Exited) {
-                    if (std::ranges::equal(parent->get_output(), target, {}, toupper, toupper)) {
-                        // 正常終了し、なおかつ出力が（大文字・小文字の違いを除いて）一致している
-                        return true;
-                    } else {
-                        // 正常終了しても出力が条件を満たしていない場合はやはり捨てる
-                        break;
-                    }
+                    // 出力が（大文字・小文字の違いを除いて）一致しているか否か
+                    // ここでは文字数だけ比較すればよい
+                    return parent->get_output().length() == target.length();
                 } else if (std::string output = parent->get_output(); output.length() > target.length()) {
                     // すでに target を超える文字数が出力されてしまっている
                     break;
