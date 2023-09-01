@@ -73,8 +73,10 @@ int main()
         std::cout << "\tGENERATION SIZE: " << bs.get_current_generation().size() << std::endl;
         std::cout << "\tBEST RESULT    : " << bs.get_current_generation().front()->get_output() << std::endl;
         std::cout << "\tBEST SCORE     : " << scoring_function(bs.get_current_generation().front()) << std::endl;
-        std::vector<std::shared_ptr<malbolge_machine_state>> found_solutions;
-        if (bs.search_current_generation(std::back_inserter(found_solutions))) {
+        if (
+            std::vector<std::shared_ptr<malbolge_machine_state>> found_solutions;
+            bs.search_current_generation(std::back_inserter(found_solutions))
+        ) {
             std::vector<std::shared_ptr<malbolge_machine_state>> tmp;
             std::ranges::sample(found_solutions, std::back_inserter(tmp), 1, std::mt19937(std::random_device{}()));
             std::cout << std::endl;
