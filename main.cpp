@@ -75,13 +75,12 @@ int main()
         std::cout << "\tBEST SCORE     : " << scoring_function(bs.get_current_generation().front()) << std::endl;
         std::vector<std::shared_ptr<malbolge_machine_state>> found_solutions;
         if (bs.search_current_generation(std::back_inserter(found_solutions))) {
-            std::mt19937 engine(std::random_device{}());
-            std::uniform_int_distribution random_index_distribution(0uz, found_solutions.size() - 1);
-            const auto random_solution = found_solutions[random_index_distribution(engine)];
+            std::vector<std::shared_ptr<malbolge_machine_state>> tmp;
+            std::ranges::sample(found_solutions, std::back_inserter(tmp), 1, std::mt19937(std::random_device{}()));
             std::cout << std::endl;
-            std::cout << "\tFINAL RESULT   : " << random_solution->get_output() << std::endl;
-            std::cout << "\tFINAL SCORE    : " << scoring_function(random_solution) << std::endl;
-            std::cout << "\tCODE           : " << random_solution->get_code() << std::endl;
+            std::cout << "\tFINAL RESULT   : " << tmp.front()->get_output() << std::endl;
+            std::cout << "\tFINAL SCORE    : " << scoring_function(tmp.front()) << std::endl;
+            std::cout << "\tCODE           : " << tmp.front()->get_code() << std::endl;
             return EXIT_SUCCESS;
         }
     }
