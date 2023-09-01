@@ -26,14 +26,16 @@ namespace {
         const std::string target = "Hello World";
         try {
             while (true) {
-                if (const auto result = parent->process(); result == malbolge_machine_state::ExecutionStatus::Aborted) {
+                const auto result = parent->process();
+                const auto output = parent->get_output();
+                if (result == malbolge_machine_state::ExecutionStatus::Aborted) {
                     // 異常終了したノードは捨てる
                     break;
                 } else if (result == malbolge_machine_state::ExecutionStatus::Exited) {
                     // 出力が（大文字・小文字の違いを除いて）一致しているか否か
                     // ここでは文字数だけ比較すればよい
-                    return parent->get_output().length() == target.length();
-                } else if (std::string output = parent->get_output(); output.length() > target.length()) {
+                    return output.length() == target.length();
+                } else if (output.length() > target.length()) {
                     // すでに target を超える文字数が出力されてしまっている
                     break;
                 } else if (output.length() > 0 && toupper(output.back()) != toupper(target[output.length() - 1])) {
