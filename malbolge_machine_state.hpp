@@ -46,9 +46,6 @@ private:
     //! 親状態へのポインタ
     const std::shared_ptr<malbolge_machine_state> parent = nullptr;
 
-    //! 初期状態からの遷移回数
-    const unsigned depth = 0;
-
     //! この状態に遷移したときに書き込まれたアドレスとワードの pair。根ノードでは使わない。
     const std::pair<malbolge::word, malbolge::word> written_word;
 
@@ -103,6 +100,9 @@ private:
     ExecutionStatus increment();
 
 public:
+    //! 初期状態からの遷移回数
+    const unsigned depth = 0;
+
     malbolge_machine_state() = default;
 
     /**
@@ -117,21 +117,13 @@ public:
         const malbolge::Instruction instruction
     )
         : parent(ptr_to_parent),
-          depth(parent->depth + 1),
           written_word(address, malbolge::encode_instruction(address, instruction)),
           A(parent->A), C(parent->C), D(parent->D),
           output(parent->output),
           memory_diffs({written_word}),
-          next_process(parent->next_process)
+          next_process(parent->next_process),
+          depth(parent->depth + 1)
     {
-    }
-
-    /**
-     * @return 初期状態からの遷移回数
-     */
-    inline unsigned get_depth() const noexcept
-    {
-        return depth;
     }
 
     /**

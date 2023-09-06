@@ -58,7 +58,7 @@ namespace {
      * をスコアとする。
      */
     const beam_searcher_t::scoring_function_t scoring_function = [](auto node) {
-        return static_cast<int>(node->get_output().length()) * 10 - static_cast<int>(node->get_depth());
+        return static_cast<int>(node->get_output().length()) * 10 - static_cast<int>(node->depth);
     };
 };
 
