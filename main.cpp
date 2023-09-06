@@ -80,7 +80,7 @@ int main()
             std::cout << std::endl;
             std::cout << "\tFINAL RESULT   : " << tmp.front()->get_output() << std::endl;
             std::cout << "\tFINAL SCORE    : " << scoring_function(tmp.front()) << std::endl;
-            std::cout << "\tCODE           : " << tmp.front()->get_code() << std::endl;
+            std::cout << "\tCODE           : " << tmp.front()->generate_code() << std::endl;
             return EXIT_SUCCESS;
         }
     }
