@@ -46,7 +46,7 @@ namespace {
         } catch (const malbolge_machine_state::memory_uninitialized_exception &mue) {
             // 未初期化メモリに 8 種類の命令それぞれを代入し、子ノードとする
             for (const auto instruction : malbolge::instructions) {
-                *bi++ = std::make_shared<malbolge_machine_state>(parent, mue.get_address_to_be_set(), instruction);
+                *bi++ = std::make_shared<malbolge_machine_state>(parent, mue.address_to_be_set, instruction);
             }
         }
         return false;

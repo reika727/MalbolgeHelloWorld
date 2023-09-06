@@ -30,25 +30,16 @@ public:
      * @brief アクセスしようとしたメモリが未初期化であった場合に投げる例外
      */
     class memory_uninitialized_exception {
-    private:
+    public:
         //! 初期化するべきメモリのアドレス
         const malbolge::word address_to_be_set;
 
-    public:
         /**
          * @param address_to_be_set 初期化すべきアドレス
          */
         inline memory_uninitialized_exception(const malbolge::word address_to_be_set)
             : address_to_be_set(address_to_be_set)
         {
-        }
-
-        /**
-         * @return 初期化するべきメモリのアドレス
-         */
-        inline malbolge::word get_address_to_be_set() const noexcept
-        {
-            return address_to_be_set;
         }
     };
 private:
