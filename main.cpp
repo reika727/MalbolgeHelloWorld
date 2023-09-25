@@ -62,7 +62,7 @@ namespace {
     };
 };
 
-int main()
+int main() try
 {
     constexpr unsigned beam_width = 10000;
     beam_searcher_t bs(beam_width, check_or_generate, scoring_function, std::make_shared<malbolge_machine_state>());
@@ -85,5 +85,11 @@ int main()
         }
     }
     std::cout << "NOT FOUND..." << std::endl;
+    return EXIT_FAILURE;
+} catch (const std::exception &e) {
+    std::cerr << e.what() << std::endl;
+    return EXIT_FAILURE;
+} catch (...) {
+    std::cerr << "an unknown exception (a class not derived from std::exception) is caught." << std::endl;
     return EXIT_FAILURE;
 }
