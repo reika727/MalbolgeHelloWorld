@@ -75,12 +75,12 @@ int main() try
             std::vector<std::shared_ptr<malbolge_machine_state>> found_solutions;
             bs.search_current_generation(std::back_inserter(found_solutions))
         ) {
-            std::vector<std::shared_ptr<malbolge_machine_state>> tmp;
-            std::ranges::sample(found_solutions, std::back_inserter(tmp), 1, std::mt19937(std::random_device{}()));
+            std::shared_ptr<malbolge_machine_state> final_result;
+            std::ranges::sample(found_solutions, &final_result, 1, std::mt19937(std::random_device{}()));
             std::cout << std::endl;
-            std::cout << "\tFINAL RESULT   : " << tmp.front()->get_output() << std::endl;
-            std::cout << "\tFINAL SCORE    : " << scoring_function(tmp.front()) << std::endl;
-            std::cout << "\tCODE           : " << tmp.front()->generate_code() << std::endl;
+            std::cout << "\tFINAL RESULT   : " << final_result->get_output() << std::endl;
+            std::cout << "\tFINAL SCORE    : " << scoring_function(final_result) << std::endl;
+            std::cout << "\tCODE           : " << final_result->generate_code() << std::endl;
             return EXIT_SUCCESS;
         }
     }
