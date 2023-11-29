@@ -1,11 +1,10 @@
 CXX      := /usr/local/bin/g++
 CXXFLAGS := -Wall -Wextra --std=c++23
-LDFLAGS  := -Wl,-rpath="$(shell dirname $(shell readlink -f $(shell which $(CXX))))/../lib64/"
 SRCS     := main.cpp ../malbolge.cpp malbolge_machine.cpp
 TARGET   := malbolge.out
 
 $(TARGET): $(SRCS)
-	$(CXX) $^ $(CXXFLAGS) $(LDFLAGS) -o $@
+	$(CXX) $^ $(CXXFLAGS) -o $@
 
 .PHONY: test
 test: $(TARGET)
