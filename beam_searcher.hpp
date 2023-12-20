@@ -15,8 +15,9 @@
 /**
  * @brief ビーム探索アルゴリズムの実装
  * @tparam Node ノードの型
+ * @tparam Generator std::uniform_random_bit_generator のモデル
  */
-template <class Node>
+template <class Node, std::uniform_random_bit_generator Generator = std::mt19937>
 class beam_searcher final {
 public:
     /**
@@ -52,24 +53,30 @@ private:
     //! 現在の世代
     std::vector<Node> current_generation;
 
+    //! 乱数生成器
+    Generator engine;
+
 public:
     /**
      * @param beam_width ビーム幅
      * @param check_or_generate 子孫ノード生成関数
      * @param scoring_function スコア関数
      * @param starting_point 根ノード
+     * @param seed 乱数のシード
      * @throws std::runtime_error ビーム幅がゼロ
      */
     beam_searcher(
         const unsigned beam_width,
         const generation_function_t check_or_generate,
         const scoring_function_t scoring_function,
-        const Node starting_point
+        const Node starting_point,
+        const Generator::result_type seed = std::random_device{}()
     )
         : beam_width(beam_width),
           check_or_generate(check_or_generate),
           scoring_function(scoring_function),
-          current_generation({starting_point})
+          current_generation({starting_point}),
+          engine(seed)
     {
         if (beam_width == 0) {
             throw std::runtime_error("beam_width must not be 0.");
@@ -119,7 +126,7 @@ public:
                     scoring_function(next_generation[beam_width - 1]),
                     std::ranges::greater(), scoring_function
                 ),
-                std::mt19937(std::random_device()())
+                engine
             );
             next_generation.resize(beam_width);
         }
