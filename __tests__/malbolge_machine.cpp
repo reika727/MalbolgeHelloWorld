@@ -42,7 +42,7 @@ bool malbolge_machine::exec_one_step(std::istream &is, std::ostream &os)
         os << static_cast<unsigned char>(a);
     } else if (opcode == malbolge::Instruction::In) {
         const auto x = is.get();
-        a = (x == EOF ? 59048 : x);
+        a = (is.eof() ? 59048 : x);
     } else if (opcode == malbolge::Instruction::Exit) {
         return true;
     }
