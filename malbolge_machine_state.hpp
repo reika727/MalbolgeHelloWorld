@@ -11,6 +11,7 @@
 #include <utility>
 #include <optional>
 #include <memory>
+#include <string_view>
 
 /**
  * @brief Malbolge 仮想機械の状態
@@ -129,7 +130,7 @@ public:
     /**
      * @return これまでに出力された文字列
      */
-    inline std::string get_output() const noexcept
+    inline std::string_view get_output() const noexcept
     {
         return output;
     }
