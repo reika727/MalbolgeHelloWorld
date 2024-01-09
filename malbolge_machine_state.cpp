@@ -36,22 +36,29 @@ malbolge_machine_state::ExecutionStatus malbolge_machine_state::operate()
     if (!opcode) {
         return ExecutionStatus::Aborted;
     }
-    if (*opcode == malbolge::Instruction::MovD) {
-        D = access_memory(D);
-    } else if (*opcode == malbolge::Instruction::Jmp) {
-        C = access_memory(D);
-    } else if (*opcode == malbolge::Instruction::RotR) {
-        A = memory_diffs[D] = malbolge::trit_rotate_right(access_memory(D));
-    } else if (*opcode == malbolge::Instruction::Op) {
-        A = memory_diffs[D] = malbolge::op(A, access_memory(D));
-    } else if (*opcode == malbolge::Instruction::Out) {
-        output += static_cast<unsigned char>(A);
-    } else if (*opcode == malbolge::Instruction::In) {
-        return ExecutionStatus::Aborted;
-    } else if (*opcode == malbolge::Instruction::Exit) {
-        return ExecutionStatus::Exited;
-    } else /* *opcode == malbolge::Instruction::Nop */ {
-        ;
+    switch (*opcode) {
+        case malbolge::Instruction::MovD:
+            D = access_memory(D);
+            break;
+        case malbolge::Instruction::Jmp:
+            C = access_memory(D);
+            break;
+        case malbolge::Instruction::RotR:
+            A = memory_diffs[D] = malbolge::trit_rotate_right(access_memory(D));
+            break;
+        case malbolge::Instruction::Op:
+            A = memory_diffs[D] = malbolge::op(A, access_memory(D));
+            break;
+        case malbolge::Instruction::Out:
+            output += static_cast<unsigned char>(A);
+            break;
+        case malbolge::Instruction::In:
+            return ExecutionStatus::Aborted;
+        case malbolge::Instruction::Exit:
+            return ExecutionStatus::Exited;
+        case malbolge::Instruction::Nop:
+            ;
+            break;
     }
     next_process = &malbolge_machine_state::increment;
     return ExecutionStatus::Running;

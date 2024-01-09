@@ -28,23 +28,37 @@ malbolge_machine::malbolge_machine(std::istream &is)
  */
 bool malbolge_machine::exec_one_step(std::istream &is, std::ostream &os)
 {
-    if (const auto opcode = malbolge::decode_operation(c, memory[c]); !opcode) {
+    const auto opcode = malbolge::decode_operation(c, memory[c]);
+    if (!opcode) {
         return false;
-    } else if (opcode == malbolge::Instruction::MovD) {
-        d = memory[d];
-    } else if (opcode == malbolge::Instruction::Jmp) {
-        c = memory[d];
-    } else if (opcode == malbolge::Instruction::RotR) {
-        a = memory[d] = malbolge::trit_rotate_right(memory[d]);
-    } else if (opcode == malbolge::Instruction::Op) {
-        a = memory[d] = malbolge::op(a, memory[d]);
-    } else if (opcode == malbolge::Instruction::Out) {
-        os << static_cast<unsigned char>(a);
-    } else if (opcode == malbolge::Instruction::In) {
-        const auto x = is.get();
-        a = (is.eof() ? 59048 : x);
-    } else if (opcode == malbolge::Instruction::Exit) {
-        return true;
+    }
+    switch (*opcode) {
+        case malbolge::Instruction::MovD:
+            d = memory[d];
+            break;
+        case malbolge::Instruction::Jmp:
+            c = memory[d];
+            break;
+        case malbolge::Instruction::RotR:
+            a = memory[d] = malbolge::trit_rotate_right(memory[d]);
+            break;
+        case malbolge::Instruction::Op:
+            a = memory[d] = malbolge::op(a, memory[d]);
+            break;
+        case malbolge::Instruction::Out:
+            os << static_cast<unsigned char>(a);
+            break;
+        case malbolge::Instruction::In:
+            {
+                const auto x = is.get();
+                a = (is.eof() ? 59048 : x);
+            }
+            break;
+        case malbolge::Instruction::Exit:
+            return true;
+        case malbolge::Instruction::Nop:
+            ;
+            break;
     }
     if (const auto encrypted = malbolge::encrypt_code(memory[c])) {
         memory[c] = *encrypted;
