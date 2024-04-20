@@ -39,7 +39,7 @@ public:
 
 private:
     //! ビーム幅
-    const unsigned beam_width;
+    const std::size_t beam_width;
 
     //! 子孫ノード生成関数
     const generation_function_t check_or_generate;
@@ -48,7 +48,7 @@ private:
     const scoring_function_t scoring_function;
 
     //! 世代カウント
-    unsigned generation = 1;
+    std::size_t generation = 1;
 
     //! 現在の世代
     std::vector<Node> current_generation;
@@ -66,7 +66,7 @@ public:
      * @throws std::runtime_error ビーム幅がゼロ
      */
     beam_searcher(
-        const unsigned beam_width,
+        const std::size_t beam_width,
         const generation_function_t check_or_generate,
         const scoring_function_t scoring_function,
         const Node starting_point,
@@ -86,7 +86,7 @@ public:
     /**
      * @return 世代カウント
      */
-    unsigned get_generation() const noexcept
+    std::size_t get_generation() const noexcept
     {
         return generation;
     }

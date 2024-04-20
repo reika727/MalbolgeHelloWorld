@@ -7,7 +7,7 @@
 #include "malbolge.hpp"
 #include "malbolge_machine_state.hpp"
 #include <iterator>
-#include <string>
+#include <string_view>
 #include <memory>
 #include <algorithm>
 #include <random>
@@ -23,7 +23,7 @@ namespace {
      */
     const beam_searcher_t::generation_function_t check_or_generate = [](auto parent, auto bi) {
         // 目標文字列（大文字・小文字の違いは無視する）
-        const std::string target = "Hello World";
+        constexpr std::string_view target = "Hello World";
         try {
             while (true) {
                 const auto result = parent->process();
@@ -64,7 +64,7 @@ namespace {
 
 int main()
 {
-    constexpr unsigned beam_width = 10000;
+    constexpr std::size_t beam_width = 10000;
     beam_searcher_t bs(beam_width, check_or_generate, scoring_function, std::make_shared<malbolge_machine_state>());
     while (!bs.get_current_generation().empty()) {
         std::cout << "GENERATION #" << bs.get_generation() << std::endl;

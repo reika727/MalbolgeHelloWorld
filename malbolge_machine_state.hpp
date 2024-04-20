@@ -102,7 +102,7 @@ private:
 
 public:
     //! 初期状態からの遷移回数
-    const unsigned depth = 0;
+    const std::size_t depth = 0;
 
     malbolge_machine_state() = default;
 

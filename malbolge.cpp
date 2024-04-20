@@ -4,7 +4,7 @@
  */
 
 #include "malbolge.hpp"
-#include <string>
+#include <string_view>
 #include <utility>
 
 namespace malbolge {
@@ -38,7 +38,7 @@ namespace malbolge {
      */
     std::optional<Instruction> decode_operation(const word address, const word data, const bool treats_non_opcode_as_nop)
     {
-        const std::string opcode_decode_table =
+        constexpr std::string_view opcode_decode_table =
             R"(+b(29e*j1VMEKLyC})8&m#~W>qxdRp0wkrUo[D7,XTcA"lI.v%{gJh4G\-=O@5`_3i<?Z';FNQuY]szf$!BS/|t:Pn6^Ha)";
         if (data < 33 || data > 126) {
             return std::nullopt;
@@ -78,11 +78,12 @@ namespace malbolge {
      */
     std::optional<word> encrypt_code(const word data)
     {
-        const std::string code_encryption_table =
+        constexpr std::string_view code_encryption_table =
             R"(5z]&gqtyfr$(we4{WP)H-Zn,[%\3dL+Q;>U!pJS72FhOA1CB6v^=I_0/8|jsb9m<.TVac`uY*MK'X~xDl}REokN:#?G"i@)";
-        if (data < 33 || data > 126) {
+        if (33 <= data && data < 127) {
+            return code_encryption_table[data - 33];
+        } else {
             return std::nullopt;
         }
-        return code_encryption_table[data - 33];
     }
 }

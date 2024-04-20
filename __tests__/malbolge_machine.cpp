@@ -10,7 +10,7 @@ malbolge_machine::malbolge_machine(std::istream &is)
     auto itr = std::begin(memory);
     for (unsigned char x; is >> std::skipws >> x; *itr++ = x) {
         if (33 <= x && x < 127) {
-            if (!malbolge::decode_operation(std::distance(std::begin(memory), itr), x, false)) {
+            if (!malbolge::decode_operation(itr - std::begin(memory), x, false)) {
                 throw std::runtime_error("invalid character in source file");
             }
         }
@@ -46,7 +46,7 @@ bool malbolge_machine::exec_one_step(std::istream &is, std::ostream &os)
             a = memory[d] = malbolge::op(a, memory[d]);
             break;
         case malbolge::Instruction::Out:
-            os << static_cast<unsigned char>(a);
+            os.put(static_cast<unsigned char>(a));
             break;
         case malbolge::Instruction::In:
             {
